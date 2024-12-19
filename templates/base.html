@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Website{% endblock %}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
     {% load static %}
-    <!-- 기본 스타일 -->
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    {% block extra_css %}{% endblock %}
-</head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="logo">MySite</a>
-            <ul class="nav-links">
-                {% if user.is_authenticated %}
-                    <li><a href="/profile/">Profile</a></li>
-                    <li><a href="/dashboard/">Dashboard</a></li>
-                    <li><a href="/accounts/logout/" class="logout-btn">Logout</a></li>
-                {% else %}
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="/contact/">Contact</a></li>
-                    <li><a href="/accounts/login/" class="login-btn">Login</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    {% block styles %}
+    {% endblock styles %}
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <h1>Sparta Market</h1>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Product Listing</a></li>
+          <li><a href="#">User Profile</a></li>
+          <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    {% block main_content %}
+    {% endblock main_content %}
 
-    <!-- Main Content -->
-    <main class="content">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
+ 
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 MySite. All rights reserved.</p>
-            <ul class="footer-links">
-                <li><a href="/privacy/">Privacy Policy</a></li>
-                <li><a href="/terms/">Terms of Service</a></li>
-                <li><a href="/contact/">Contact Us</a></li>
-            </ul>
+      <div class="footer-content">
+        <!-- 왼쪽 텍스트 버튼 -->
+        <div class="footer-links">
+          <a href="#">About Us</a>
+          <a href="#">Contact</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
         </div>
+        <!-- 오른쪽 소셜 아이콘 -->
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
