@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}" />
+  </head>
+  <body>
+    <div class="header">
+      <a href="#" class="logo-link">
+        <img
+          src="{% static 'accounts/images/market_logo.png' %}"
+          alt="Market Logo"
+        />
+        <h1>Sparta Market</h1>
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>Welcome back</h1>
+      <form method="post" action="{% url 'accounts:login' %}">
+        {% csrf_token %}
+        <!-- 에러 메시지 표시 -->
+        {% if error_message %}
+        <div class="error-message">
+          <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+        <input type="text" name="username" placeholder="User Name" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <div class="remember-me">
+          <input type="checkbox" id="remember" />
+          <label for="remember">Remember for 30 days</label>
+          <a href="#" class="link" style="margin-left: auto">Forgot password</a>
+        </div>
+        <button type="submit" class="btn">Log In</button>
+      </form>
+      <div class="signup">
+        <p>
+          Don't have an account?
+          <a href="{% url 'accounts:signup' %}">Sign up</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
