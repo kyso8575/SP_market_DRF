@@ -1,112 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enhanced Profile Page</title>
+{% extends "base.html" %}
+
+{% block styles %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
+{% endblock styles %}
+
+{% block main_content %}
+<main class="main-container">
+  <!-- Profile Sidebar -->
+  <div class="profile-sidebar">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
-  </head>
-  <body>
-    <header class="header">
-      <div class="logo">
-        <h1>MarketShow</h1>
-      </div>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Product Listing</a></li>
-          <li><a href="#">User Profile</a></li>
-          {% if user.is_authenticated %}
-            <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-          {% else %}
-            <li><a href="{% url 'accounts:login' %}">Login</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
-    <main class="main-container">
-      <!-- Profile Sidebar -->
-      <div class="profile-sidebar">
-        {% load static %}
-        <img src="{% static 'accounts/images/user.png' %}" alt="User Profile" class="profile-img" />
-        <h2>Alex Johnson</h2>
-        <p>alex.johnson@example.com</p>
-        <button class="btn-edit">Edit Profile</button>
-      </div>
-
-      <!-- Profile Content -->
-      <div class="profile-content">
-        <section class="item-section">
-          <h3>My Listed Items</h3>
-          <div class="item-grid">
-            <div class="item-card">
-              <img src="item1.jpg" alt="Vintage Chair" />
-              <p>Vintage Chair<br /><strong>Price: $120</strong></p>
-            </div>
-            <div class="item-card">
-              <img src="item2.jpg" alt="Modern Lamp" />
-              <p>Modern Lamp<br /><strong>Price: $45</strong></p>
-            </div>
-            <div class="item-card">
-              <img src="item3.jpg" alt="Kitchen Utensils" />
-              <p>Kitchen Utensils<br /><strong>Price: $35</strong></p>
-            </div>
-          </div>
-        </section>
-
-        <section class="item-section">
-          <h3>Liked Items & Wishlist</h3>
-          <div class="item-grid">
-            <div class="item-card">
-              <img src="item4.jpg" alt="Elegant Wristwatch" />
-              <p>Elegant Wristwatch</p>
-            </div>
-            <div class="item-card">
-              <img src="item5.jpg" alt="Knitted Blanket" />
-              <p>Knitted Blanket</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="connect-section">
-          <h3>Connect with Other Users</h3>
-          <div class="user-grid">
-            <div class="user-card">
-              <img src="user1.jpg" alt="Sarah Lee" />
-              <p>Sarah Lee</p>
-              <button class="btn-connect">Connect</button>
-            </div>
-            <div class="user-card">
-              <img src="user2.jpg" alt="Michael Chen" />
-              <p>Michael Chen</p>
-              <button class="btn-connect">Connect</button>
-            </div>
-            <div class="user-card">
-              <img src="user3.jpg" alt="Emily Brown" />
-              <p>Emily Brown</p>
-              <button class="btn-connect">Connect</button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-    <footer class="footer">
-      <div class="footer-content">
-        <!-- 왼쪽 텍스트 버튼 -->
-        <div class="footer-links">
-          <a href="#">About Us</a>
-          <a href="#">Contact</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
+    <img src="{% static 'accounts/images/user.png' %}" alt="User Profile" class="profile-img" />
+    <h2>Alex Johnson</h2>
+    <p>alex.johnson@example.com</p>
+    <button class="btn-edit">Edit Profile</button>
+  </div>
+  <!-- Profile Content -->
+  <div class="profile-content">
+    <section class="item-section">
+      <h3>My Listed Items</h3>
+      <div class="item-grid">
+        <div class="item-card">
+          <img src="item1.jpg" alt="Vintage Chair" />
+          <p>Vintage Chair<br /><strong>Price: $120</strong></p>
         </div>
-        <!-- 오른쪽 소셜 아이콘 -->
-        <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
+        <div class="item-card">
+          <img src="item2.jpg" alt="Modern Lamp" />
+          <p>Modern Lamp<br /><strong>Price: $45</strong></p>
+        </div>
+        <div class="item-card">
+          <img src="item3.jpg" alt="Kitchen Utensils" />
+          <p>Kitchen Utensils<br /><strong>Price: $35</strong></p>
         </div>
       </div>
-    </footer>
-  </body>
-</html>
+    </section>
+    <section class="item-section">
+      <h3>Liked Items & Wishlist</h3>
+      <div class="item-grid">
+        <div class="item-card">
+          <img src="item4.jpg" alt="Elegant Wristwatch" />
+          <p>Elegant Wristwatch</p>
+        </div>
+        <div class="item-card">
+          <img src="item5.jpg" alt="Knitted Blanket" />
+          <p>Knitted Blanket</p>
+        </div>
+      </div>
+    </section>
+    <section class="connect-section">
+      <h3>Connect with Other Users</h3>
+      <div class="user-grid">
+        <div class="user-card">
+          <img src="user1.jpg" alt="Sarah Lee" />
+          <p>Sarah Lee</p>
+          <button class="btn-connect">Connect</button>
+        </div>
+        <div class="user-card">
+          <img src="user2.jpg" alt="Michael Chen" />
+          <p>Michael Chen</p>
+          <button class="btn-connect">Connect</button>
+        </div>
+        <div class="user-card">
+          <img src="user3.jpg" alt="Emily Brown" />
+          <p>Emily Brown</p>
+          <button class="btn-connect">Connect</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock main_content %}
