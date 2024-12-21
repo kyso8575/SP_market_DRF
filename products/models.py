@@ -8,9 +8,9 @@ User = settings.AUTH_USER_MODEL
 class Product(models.Model):
     """상품 모델"""
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")  # 판매자
-    name = models.CharField(max_length=255)  # 상품 이름
+    name = models.CharField(max_length=50)  # 상품 이름
     description = models.TextField()  # 상품 설명
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # 상품 가격
+    price = models.PositiveBigIntegerField()  # 상품 가격
     condition = models.CharField(
         max_length=50,
         choices=[
