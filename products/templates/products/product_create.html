@@ -1,6 +1,15 @@
-{% extends "base.html" %} {% block styles %} {% load static %}
+{% extends "base.html" %} 
+
+{% block styles %} 
+{% load static %}
 <link rel="stylesheet" href="{% static 'products/css/product_create.css' %}" />
-{% endblock styles %} {% block main_content %}
+{% endblock styles %} 
+
+{% block scripts %}
+<script src="{% static 'products/js/product_create.js' %}"></script>
+{% endblock scripts %}
+
+{% block main_content %}
 <div class="wrapper">
   <div class="container">
     <h1>Register a Product</h1>
@@ -45,11 +54,19 @@
       </select>
 
       <!-- 상품 이미지 -->
-      <label for="images">Upload Images</label>
-      <input type="file" id="images" name="images" accept="image/*" required />
+      <label for="images">Upload Images:</label>
+      <input 
+          type="file" 
+          id="images" 
+          name="images" 
+          accept="image/*" 
+          multiple 
+          required 
+      />
+      <div id="image-preview"></div>
 
-      <!-- 제출 버튼 -->
-      <button type="submit">Register Product</button>
+         <!-- 제출 버튼 -->
+         <button type="submit">Register Product</button>
     </form>
   </div>
 </div>
