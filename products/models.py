@@ -5,12 +5,17 @@ from django.conf import settings
 # 사용자 모델 연결 (settings.AUTH_USER_MODEL)
 User = settings.AUTH_USER_MODEL
 
+from django.db import models
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
+
 class Product(models.Model):
     """상품 모델"""
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")  # 판매자
-    name = models.CharField(max_length=50)  # 상품 이름
-    description = models.TextField()  # 상품 설명
-    price = models.PositiveBigIntegerField()  # 상품 가격
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     condition = models.CharField(
         max_length=50,
         choices=[
@@ -19,14 +24,24 @@ class Product(models.Model):
             ('used', 'Used'),
         ],
         default='used',
-    )  # 상품 상태
-    images = models.ImageField(upload_to="product_images/")  # 상품 이미지
-    created_at = models.DateTimeField(auto_now_add=True)  # 생성 시간
-    updated_at = models.DateTimeField(auto_now=True)  # 수정 시간
-    is_sold = models.BooleanField(default=False)  # 판매 여부
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+
+class ProductImage(models.Model):
+    """상품 이미지 모델"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="product_images/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for {self.product.name}"
+
 
 class Favorite(models.Model):
     """찜 목록 모델"""
