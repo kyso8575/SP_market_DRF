@@ -1,73 +1,80 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block styles %}
-
-{% load static %}
 <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
 {% endblock styles %}
 
 {% block main_content %}
 <main class="main-container">
-  <!-- Profile Sidebar -->
-  <div class="profile-sidebar">
-    {% load static %}
+  <!-- 📌 Profile Sidebar -->
+  <aside class="profile-sidebar">
     <img src="{% static 'accounts/images/user.png' %}" alt="User Profile" class="profile-img" />
-    <h2>Alex Johnson</h2>
-    <p>alex.johnson@example.com</p>
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    <p>{{ user.email }}</p>
+    <p><strong>Date Joined:</strong> {{ user.date_joined|date:"Y-m-d" }}</p>
     <button class="btn-edit">Edit Profile</button>
-  </div>
-  <!-- Profile Content -->
-  <div class="profile-content">
+  </aside>
+
+  <!-- 📌 Profile Content -->
+  <section class="profile-content">
+    <!-- ✅ My Listed Items -->
     <section class="item-section">
       <h3>My Listed Items</h3>
-      <div class="item-grid">
-        <div class="item-card">
-          <img src="item1.jpg" alt="Vintage Chair" />
-          <p>Vintage Chair<br /><strong>Price: $120</strong></p>
+      {% if product_data %}
+        <div class="item-grid">
+          {% for item in product_data %}
+            <div class="item-card">
+              {% if item.image %}
+                <img src="{{ item.image }}" alt="{{ item.product.name }}" />
+              {% else %}
+                <div class="no-image">No Image</div>
+              {% endif %}
+              <p>{{ item.product.name }}<br /><strong>Price: ${{ item.product.price }}</strong></p>
+            </div>
+          {% endfor %}
         </div>
-        <div class="item-card">
-          <img src="item2.jpg" alt="Modern Lamp" />
-          <p>Modern Lamp<br /><strong>Price: $45</strong></p>
-        </div>
-        <div class="item-card">
-          <img src="item3.jpg" alt="Kitchen Utensils" />
-          <p>Kitchen Utensils<br /><strong>Price: $35</strong></p>
-        </div>
-      </div>
+      {% else %}
+        <p>No listed items available.</p>
+      {% endif %}
     </section>
+
+    <!-- ✅ Liked Items / Wishlist -->
     <section class="item-section">
       <h3>Liked Items & Wishlist</h3>
       <div class="item-grid">
         <div class="item-card">
-          <img src="item4.jpg" alt="Elegant Wristwatch" />
-          <p>Elegant Wristwatch</p>
+          <img src="{% static 'accounts/images/sample_item.png' %}" alt="Sample Item" />
+          <p>Sample Liked Item</p>
         </div>
         <div class="item-card">
-          <img src="item5.jpg" alt="Knitted Blanket" />
-          <p>Knitted Blanket</p>
+          <img src="{% static 'accounts/images/sample_item.png' %}" alt="Sample Item" />
+          <p>Sample Wishlist Item</p>
         </div>
       </div>
     </section>
-    <section class="connect-section">
-      <h3>Connect with Other Users</h3>
-      <div class="user-grid">
-        <div class="user-card">
-          <img src="user1.jpg" alt="Sarah Lee" />
-          <p>Sarah Lee</p>
-          <button class="btn-connect">Connect</button>
-        </div>
-        <div class="user-card">
-          <img src="user2.jpg" alt="Michael Chen" />
-          <p>Michael Chen</p>
-          <button class="btn-connect">Connect</button>
-        </div>
-        <div class="user-card">
-          <img src="user3.jpg" alt="Emily Brown" />
-          <p>Emily Brown</p>
-          <button class="btn-connect">Connect</button>
-        </div>
-      </div>
-    </section>
-  </div>
+  </section>
 </main>
+
+<!-- ✅ Connect with Other Users -->
+<section class="connect-section">
+  <h3>Connect with Other Users</h3>
+  <div class="user-grid">
+    <div class="user-card">
+      <img src="{% static 'accounts/images/user1.png' %}" alt="Sarah Lee" />
+      <p>Sarah Lee</p>
+      <button class="btn-connect">Connect</button>
+    </div>
+    <div class="user-card">
+      <img src="{% static 'accounts/images/user2.png' %}" alt="Michael Chen" />
+      <p>Michael Chen</p>
+      <button class="btn-connect">Connect</button>
+    </div>
+    <div class="user-card">
+      <img src="{% static 'accounts/images/user3.png' %}" alt="Emily Brown" />
+      <p>Emily Brown</p>
+      <button class="btn-connect">Connect</button>
+    </div>
+  </div>
+</section>
 {% endblock main_content %}

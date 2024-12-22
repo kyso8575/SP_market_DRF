@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, ProductImage
+from django.contrib.auth import get_user_model  # 커스텀 User 모델 가져오기
+
+User = get_user_model()  # 현재 설정된 사용자 모델
 
 # Create your views here.
 
@@ -21,7 +24,7 @@ def product_create(request):
 
         # Product 객체 생성 및 저장
         product = Product.objects.create(
-            seller=request.user,
+            user=request.user,
             name=name,
             description=description,
             price=price,
@@ -32,6 +35,6 @@ def product_create(request):
         for image in images:
             ProductImage.objects.create(product=product, image=image)
 
-        return redirect('accounts:profile')  # 상품 목록 페이지로 리디렉션
+        return redirect('accounts:profile', id=request.user.id) 
 
     return render(request, "products/product_create.html")
