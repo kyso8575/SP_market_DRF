@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model  # 커스텀 User 모델 가져오기
 from products.models import Product, ProductImage
+import random
+from django.http import JsonResponse
 
 User = get_user_model()  # 현재 설정된 사용자 모델
 
@@ -65,28 +67,74 @@ def signup(request):
     return render(request, "accounts/signup.html")
 
 
-@login_required(login_url='accounts:login')  # 로그인되지 않은 경우 리디렉션할 URL
-def profile(request, id):
 
-    # 1️⃣ 사용자 정보 가져오기
+@login_required(login_url='accounts:login')
+def profile(request, id):
     user = get_object_or_404(User, id=id)
-    
-    # 2️⃣ 해당 사용자가 등록한 상품 가져오기
-    products = Product.objects.filter(user=user)
-    
-    # 3️⃣ 각 상품의 첫 번째 이미지 가져오기
-    product_data = []
-    for product in products:
-        first_image = ProductImage.objects.filter(product=product).first()
-        product_data.append({
+
+    # 사용자가 등록한 상품 목록
+    products = Product.objects.filter(user=user).prefetch_related('images')
+    product_data = [
+        {
             'product': product,
-            'image': first_image.image.url if first_image else None  # 첫 번째 이미지 URL 또는 None
-        })
+            'image': product.images.first().image.url if product.images.exists() else None
+        }
+        for product in products
+    ]
+
+    # 사용자의 위시리스트
+    wishlist_items = Product.objects.filter(liked_users=user).prefetch_related('images')
+    wishlist_data = [
+        {
+            'product': product,
+            'image': product.images.first().image.url if product.images.exists() else None
+        }
+        for product in wishlist_items
+    ]
+
+    # 현재 사용자의 팔로우 여부 확인
+    is_following = request.user.following.filter(id=user.id).exists()
+
+    # 랜덤 사용자 추천
+    users = User.objects.exclude(id=request.user.id)
+    random_users = random.sample(list(users), min(len(users), 6))
+    users_data = [
+        {
+            'id': random_user.id,
+            'username': random_user.username,
+            'first_name': random_user.first_name,
+            'profile_image': random_user.profile_image.url if random_user.profile_image else None,
+            'is_following': request.user.following.filter(id=random_user.id).exists()
+        }
+        for random_user in random_users
+    ]
 
     context = {
-        'user': user,          # 사용자 정보
-        'product_data': product_data,  # 상품 + 첫 번째 이미지
+        'user_profile': user,
+        'product_data': product_data,
+        'wishlist_data': wishlist_data,
+        'is_owner': request.user == user,  # 내 프로필 여부 확인
+        'is_following': is_following,  # 팔로우 여부
+        'followers_count': user.followers.count(),  # 팔로워 수
+        'following_count': user.following.count(),  # 팔로잉 수
+        'users_data': users_data,  # 랜덤 사용자 목록
     }
 
     return render(request, 'accounts/profile.html', context)
 
+
+@login_required
+def follow_user(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    if request.user != target_user:
+        request.user.following.add(target_user)
+        return JsonResponse({'status': 'followed'})
+    return JsonResponse({'status': 'error'}, status=400)
+
+@login_required
+def unfollow_user(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    if request.user != target_user:
+        request.user.following.remove(target_user)
+        return JsonResponse({'status': 'unfollowed'})
+    return JsonResponse({'status': 'error'}, status=400)

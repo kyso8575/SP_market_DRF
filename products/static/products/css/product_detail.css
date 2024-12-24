@@ -3,11 +3,15 @@
   display: flex;
   gap: 40px;
   padding: 40px;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
   max-width: 1200px;
   margin: 0 auto;
   align-items: flex-start;
 }
 
+
+/* 상
 /* 📌 상품 이미지 섹션 */
 .product-images {
   display: flex;
@@ -136,80 +140,4 @@
   .main-image img {
     height: 300px;
   }
-}
-
-
-
-/* 📌 Newsletter Section */
-.newsletter {
-  text-align: center;
-  margin-top: 60px;
-  padding: 40px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-
-.newsletter h3 {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
-.newsletter-signup {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.newsletter-signup input {
-  padding: 10px;
-  width: 300px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.newsletter-signup .btn-signup {
-  padding: 10px 20px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.newsletter-signup .btn-signup:hover {
-  background-color: #ff8a8a;
-}
-
-/* 📌 Responsive Design */
-@media (max-width: 768px) {
-  .product-detail-container {
-    flex-direction: column;
-  }
-
-  .product-images .main-image img {
-    height: 300px;
-  }
-
-  .newsletter-signup {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-
-/* 추가 이미지 버튼 */
-#add-image-btn {
-  margin-top: 15px;
-  padding: 10px 15px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-#add-image-btn:hover {
-  background-color: #ff8a8a;
 }

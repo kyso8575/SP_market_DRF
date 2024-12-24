@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const likeButtons = document.querySelectorAll('.like-button');
 
@@ -33,3 +35,5 @@ function getCSRFToken() {
   const csrfTokenElement = document.querySelector('input[name="csrfmiddlewaretoken"]');
   return csrfTokenElement ? csrfTokenElement.value : '';
 }
+
+

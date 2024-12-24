@@ -17,11 +17,13 @@
     <div class="product-list">
         {% for item in product_data %}
         <div class="product-item">
+            <a href="{% url 'products:product_detail' item.product.id  %}">
             {% if item.image %}
                 <img src="{{ item.image }}" alt="{{ item.product.name }}">
             {% else %}
                 <img src="{% static 'products/images/default_image.jpg' %}" alt="No Image Available">
             {% endif %}
+            </a>
             
             <!-- 좋아요 버튼 (하트 아이콘) -->
             <div class="like-container">

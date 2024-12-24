@@ -1,19 +1,72 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block styles %}
+{% extends "base.html" %} {% load static %} {% block styles %}
 <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
-{% endblock styles %}
-
-{% block main_content %}
+{% endblock styles %} {% block scripts %}
+<script src="{% static 'accounts/js/profile.js' %}"></script>
+{% endblock scripts %} {% block main_content %}
 <main class="main-container">
   <!-- 📌 Profile Sidebar -->
   <aside class="profile-sidebar">
-    <img src="{% static 'accounts/images/user.png' %}" alt="User Profile" class="profile-img" />
-    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-    <p>{{ user.email }}</p>
-    <p><strong>Date Joined:</strong> {{ user.date_joined|date:"Y-m-d" }}</p>
+    {% if user_profile.profile_image %}
+    <img
+      src="{{ user_profile.profile_image.url }}"
+      alt="User Profile"
+      class="profile-img"
+    />
+    {% else %}
+    <img
+      src="{% static 'accounts/images/user.png' %}"
+      alt="Default User Profile"
+      class="profile-img"
+    />
+    {% endif %}
+    <h2>{{ user_profile.first_name }} {{ user_profile.last_name }}</h2>
+    <p>{{ user_profile.email }}</p>
+    <p>
+      <strong>Date Joined:</strong> {{ user_profile.date_joined|date:"Y-m-d" }}
+    </p>
+
+    <!-- ✅ Follow/Unfollow or Edit Profile Button -->
+    {% if is_owner %}
     <button class="btn-edit">Edit Profile</button>
+    {% else %} {% if is_following %}
+    <form
+      class="follow-form"
+      data-user-id="{{ user_profile.id }}"
+      data-action-url="{% url 'accounts:unfollow_user' user_profile.id %}"
+      method="post"
+    >
+      {% csrf_token %}
+      <button
+        type="button"
+        class="btn-unfollow"
+        onclick="handleFollowToggle(this)"
+      >
+        Unfollow
+      </button>
+    </form>
+    {% else %}
+    <form
+      class="follow-form"
+      data-user-id="{{ user_profile.id }}"
+      data-action-url="{% url 'accounts:follow_user' user_profile.id %}"
+      method="post"
+    >
+      {% csrf_token %}
+      <button
+        type="button"
+        class="btn-follow"
+        onclick="handleFollowToggle(this)"
+      >
+        Follow
+      </button>
+    </form>
+    {% endif %} {% endif %}
+
+    <!-- ✅ Follower & Following Count -->
+    <div class="follow-stats">
+      <p><strong>Followers:</strong> {{ followers_count }}</p>
+      <p><strong>Following:</strong> {{ following_count }}</p>
+    </div>
   </aside>
 
   <!-- 📌 Profile Content -->
@@ -22,59 +75,112 @@
     <section class="item-section">
       <h3>My Listed Items</h3>
       {% if product_data %}
-        <div class="item-grid">
-          {% for item in product_data %}
-            <div class="item-card">
-              {% if item.image %}
-                <img src="{{ item.image }}" alt="{{ item.product.name }}" />
-              {% else %}
-                <div class="no-image">No Image</div>
-              {% endif %}
-              <p>{{ item.product.name }}<br /><strong>Price: ${{ item.product.price }}</strong></p>
-            </div>
-          {% endfor %}
+      <div class="item-grid">
+        {% for item in product_data %}
+        <div class="item-card">
+          {% if item.image %}
+          <img src="{{ item.image }}" alt="{{ item.product.name }}" />
+          {% else %}
+          <div class="no-image">No Image</div>
+          {% endif %}
+          <p>
+            {{ item.product.name }}<br /><strong
+              >Price: ${{ item.product.price }}</strong
+            >
+          </p>
         </div>
+        {% endfor %}
+      </div>
       {% else %}
-        <p>No listed items available.</p>
+      <p>No listed items available.</p>
       {% endif %}
     </section>
 
-    <!-- ✅ Liked Items / Wishlist -->
+    <!-- ✅ Liked Items & Wishlist -->
     <section class="item-section">
       <h3>Liked Items & Wishlist</h3>
+      {% if wishlist_data %}
       <div class="item-grid">
+        {% for item in wishlist_data %}
         <div class="item-card">
-          <img src="{% static 'accounts/images/sample_item.png' %}" alt="Sample Item" />
-          <p>Sample Liked Item</p>
+          {% if item.image %}
+          <img src="{{ item.image }}" alt="{{ item.product.name }}" />
+          {% else %}
+          <img
+            src="{% static 'accounts/images/sample_item.png' %}"
+            alt="No Image Available"
+          />
+          {% endif %}
+          <p>{{ item.product.name }}</p>
+          <p>{{ item.product.price }}원</p>
+          <p>상태: {{ item.product.get_condition_display }}</p>
         </div>
-        <div class="item-card">
-          <img src="{% static 'accounts/images/sample_item.png' %}" alt="Sample Item" />
-          <p>Sample Wishlist Item</p>
-        </div>
+        {% endfor %}
       </div>
+      {% else %}
+      <p>위시리스트에 추가된 상품이 없습니다.</p>
+      {% endif %}
     </section>
   </section>
 </main>
 
 <!-- ✅ Connect with Other Users -->
 <section class="connect-section">
-  <h3>Connect with Other Users</h3>
+  <h3>Other Users</h3>
   <div class="user-grid">
+    {% for data in users_data %}
     <div class="user-card">
-      <img src="{% static 'accounts/images/user1.png' %}" alt="Sarah Lee" />
-      <p>Sarah Lee</p>
-      <button class="btn-connect">Connect</button>
+      <!-- ✅ 프로필 이미지 클릭 시 프로필 페이지로 이동 -->
+      <a href="{% url 'accounts:profile' data.id %}">
+        {% if data.profile_image %}
+        <img src="{{ data.profile_image }}" alt="{{ data.username }}" />
+        {% else %}
+        <img
+          src="{% static 'accounts/images/user.png' %}"
+          alt="{{ data.username }}"
+        />
+        {% endif %}
+      </a>
+      <p>{{ data.first_name }}</p>
+
+      <!-- ✅ Follow/Unfollow 버튼 -->
+      {% if data.is_following %}
+      <form
+        class="follow-form"
+        data-user-id="{{ data.id }}"
+        data-action-url="{% url 'accounts:unfollow_user' data.id %}"
+        method="post"
+      >
+        {% csrf_token %}
+        <button
+          type="button"
+          class="btn-unfollow"
+          onclick="handleFollowToggle(this)"
+        >
+          Unfollow
+        </button>
+      </form>
+      {% else %}
+      <form
+        class="follow-form"
+        data-user-id="{{ data.id }}"
+        data-action-url="{% url 'accounts:follow_user' data.id %}"
+        method="post"
+      >
+        {% csrf_token %}
+        <button
+          type="button"
+          class="btn-follow"
+          onclick="handleFollowToggle(this)"
+        >
+          Follow
+        </button>
+      </form>
+      {% endif %}
     </div>
-    <div class="user-card">
-      <img src="{% static 'accounts/images/user2.png' %}" alt="Michael Chen" />
-      <p>Michael Chen</p>
-      <button class="btn-connect">Connect</button>
-    </div>
-    <div class="user-card">
-      <img src="{% static 'accounts/images/user3.png' %}" alt="Emily Brown" />
-      <p>Emily Brown</p>
-      <button class="btn-connect">Connect</button>
-    </div>
+    {% empty %}
+    <p>No other users available.</p>
+    {% endfor %}
   </div>
 </section>
 {% endblock main_content %}
