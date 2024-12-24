@@ -34,6 +34,8 @@
 }
 
 /* 📌 Edit Button */
+.btn-follow,
+.btn-unfollow,
 .btn-edit {
   margin-top: 15px;
   padding: 10px 20px;

@@ -28,6 +28,9 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_sold = models.BooleanField(default=False)
+    likes_count = models.PositiveIntegerField(default=0)
+    views_count = models.PositiveIntegerField(default=0)
+    liked_users = models.ManyToManyField(User, related_name='liked_products', blank=True)
 
     def __str__(self):
         return self.name
@@ -41,16 +44,3 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
-
-
-class Favorite(models.Model):
-    """찜 목록 모델"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorites")  # 사용자
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="favorited_by")  # 찜한 상품
-    created_at = models.DateTimeField(auto_now_add=True)  # 생성 시간
-
-    class Meta:
-        unique_together = ('user', 'product')  # 사용자와 상품의 중복 방지
-
-    def __str__(self):
-        return f"{self.user.username} favorited {self.product.name}"

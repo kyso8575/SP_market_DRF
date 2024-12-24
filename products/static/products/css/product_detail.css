@@ -1,0 +1,143 @@
+/* 📌 Main Layout */
+.product-detail-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+
+/* 상
+/* 📌 상품 이미지 섹션 */
+.product-images {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* 📌 썸네일 이미지 리스트 */
+.thumbnail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 100px;
+  overflow-y: auto;
+}
+
+.thumbnail-list .thumbnail-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, border 0.2s ease-in-out;
+}
+
+.thumbnail-list .thumbnail-image:hover {
+  transform: scale(1.1);
+  border: 2px solid #ff6b6b;
+}
+
+/* 📌 메인 이미지 */
+.main-image {
+  flex: 1;
+  max-width: 500px;
+  text-align: center;
+}
+
+.main-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 상품 정보 섹션 */
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.product-header .price {
+  font-size: 20px;
+  color: #ff6b6b;
+}
+
+.product-description p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 📌 버튼 */
+.product-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-action,
+.btn-wishlist {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-action {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+}
+
+.btn-action:hover {
+  background-color: #ff8a8a;
+}
+
+.btn-wishlist {
+  background-color: #555;
+  color: white;
+  border: none;
+}
+
+.btn-wishlist:hover {
+  background-color: #777;
+}
+
+/* 📌 반응형 디자인 */
+@media (max-width: 768px) {
+  .product-detail-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .thumbnail-list {
+    flex-direction: row;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .thumbnail-list .thumbnail-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .main-image img {
+    height: 300px;
+  }
+}

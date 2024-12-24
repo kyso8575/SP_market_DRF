@@ -90,18 +90,20 @@ button:hover {
 }
 
 #image-preview {
-  width: 100px !important;
-  height: 100px !important;
-  border: 1px solid #ccc !important;
-  border-radius: 5px !important;
-  overflow: hidden !important; 
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  display: flex;
+  flex-wrap: wrap; /* 여러 줄로 표시 */
+  gap: 10px; /* 이미지 간격 */
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 #image-preview img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
+

@@ -6,48 +6,49 @@
     <title>Profile</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    {% block styles %}
-    {% endblock styles %}
+    {% block styles %} 
+    {% endblock styles %} 
 
-    {% block scripts %}
+    {% block scripts %} 
     {% endblock scripts %}
+
   </head>
   <body>
-    <header class="header">
-      <div class="logo">
-        <h1>Sparta Market</h1>
-      </div>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Product Listing</a></li>
-          <li><a href="#">User Profile</a></li>
-          <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-    {% block main_content %}
-    {% endblock main_content %}
+    <div class="base-wrapper">
+      <header class="header">
+        <div class="logo">
+          <h1><a href="{% url 'products:product_list' %}" class="page-title">Sparta Market</a></h1>
+        </div>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="{% url 'products:product_create' %}">Register Products</a></li>
+            <li><a href="{% url 'accounts:profile' user.id %}">User Profile</a></li>
+            <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+          </ul>
+        </nav>
+      </header>
 
- 
-    <footer class="footer">
-      <div class="footer-content">
-        <!-- 왼쪽 텍스트 버튼 -->
-        <div class="footer-links">
-          <a href="#">About Us</a>
-          <a href="#">Contact</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
+      <main class="main-content">
+        {% block main_content %} {% endblock main_content %}
+      </main>
+
+      <footer class="footer">
+        <div class="footer-content">
+          <!-- 왼쪽 텍스트 버튼 -->
+          <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+          </div>
+          <!-- 오른쪽 소셜 아이콘 -->
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
         </div>
-        <!-- 오른쪽 소셜 아이콘 -->
-        <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   </body>
-
 </html>
