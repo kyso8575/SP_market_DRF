@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'products/css/product_detail.css' %}" />
+{% endblock styles %}
+
+{% block main_content %}
+<main class="product-detail-container">
+  <!-- 📌 상품 이미지 섹션 -->
+  <section class="product-images">
+    <div class="thumbnail-list">
+      {% for image in product_images %}
+        <img 
+          src="{{ image.image.url }}" 
+          alt="Thumbnail {{ forloop.counter }}" 
+          class="thumbnail-image"
+          onclick="changeMainImage('{{ image.image.url }}')" />
+      {% endfor %}
+    </div>
+    <div class="main-image">
+      <img id="main-image" src="{{ product_images.first.image.url }}" alt="{{ product.name }}" />
+    </div>
+  </section>
+
+  <!-- 📌 상품 정보 섹션 -->
+  <section class="product-info">
+    <div class="product-header">
+      {% if product.is_sold_out %}
+        <span class="badge-soldout">Sold Out</span>
+      {% endif %}
+      <h1>{{ product.name }}</h1>
+      <p class="price">${{ product.price }}</p>
+    </div>
+    
+    <div class="product-description">
+      <p>{{ product.description }}</p>
+    </div>
+    
+    <div class="product-actions">
+      <button class="btn-action">Decrement / Increment</button>
+      <button class="btn-wishlist">Add to Wishlist</button>
+    </div>
+  </section>
+</main>
+
+<!-- 📌 뉴스레터 섹션 -->
+<section class="newsletter">
+  <h3>Exclusive Offer: Get 15% Off Today! Sign Up for Updates</h3>
+  <div class="newsletter-signup">
+    <input type="email" placeholder="Enter your email address" />
+    <button class="btn-signup">Sign Up</button>
+  </div>
+</section>
+
+{% block scripts %}
+<script>
+  function changeMainImage(imageUrl) {
+    const mainImage = document.getElementById('main-image');
+    mainImage.src = imageUrl;
+  }
+</script>
+{% endblock scripts %}
+{% endblock main_content %}

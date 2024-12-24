@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+
+{% block styles %} 
+{% load static %}
+<link rel="stylesheet" href="{% static 'products/css/product_list.css' %}" />
+{% endblock styles %} 
+
+
+{% block scripts %}
+<script src="{% static 'products/js/product_list.js' %}"></script>
+{% endblock scripts %}
+
+{% block main_content %}
+<!-- Main Content -->
+<main>
+    <h2 class="section-title">오늘의 상품 추천</h2>
+    <div class="product-list">
+        {% for item in product_data %}
+        <div class="product-item">
+            {% if item.image %}
+                <img src="{{ item.image }}" alt="{{ item.product.name }}">
+            {% else %}
+                <img src="{% static 'products/images/default_image.jpg' %}" alt="No Image Available">
+            {% endif %}
+            
+            <!-- 좋아요 버튼 (하트 아이콘) -->
+            <div class="like-container">
+                <form method="POST" action="{% url 'products:like_product' item.product.id %}" class="like-form">
+                    {% csrf_token %}
+                    <button type="button" class="like-button {% if request.user in item.product.liked_users.all %}liked{% endif %}" 
+                            data-product-id="{{ item.product.id }}">
+                        {% if request.user in item.product.liked_users.all %}
+                            ❤️<!-- 좋아요 상태: 빨간 하트 -->
+                        {% else %}
+                            🤍 <!-- 비좋아요 상태: 투명/회색 하트 -->
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+            
+            <div class="product-details">
+                <p class="product-name">{{ item.product.name }}</p>
+                <p class="product-price">{{ item.product.price|default:"0" }} 원</p>
+                <p class="product-date">{{ item.product.created_at|date:"Y년 m월 d일" }}</p>
+                <span class="like-count">Like: {{ item.product.likes_count }}</span> <!-- 좋아요 수 표시 -->
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-message">등록된 상품이 없습니다.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock main_content %}
