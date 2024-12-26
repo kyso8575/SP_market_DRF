@@ -83,8 +83,6 @@ def like_product(request, product_id):
     return JsonResponse({'status': status, 'likes_count': product.likes_count})
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import Product, ProductImage
 
 def product_detail(request, product_id):
     # 상품 객체 가져오기
@@ -103,3 +101,38 @@ def product_detail(request, product_id):
     }
     
     return render(request, 'products/product_detail.html', context)
+
+def product_edit(request, product_id):
+    # 상품 객체 가져오기
+    product = get_object_or_404(Product, id=product_id)
+    product_images = ProductImage.objects.filter(product=product)
+
+    if request.method == 'POST':
+        # 상품 정보 수정
+        product.name = request.POST['name']
+        product.description = request.POST['description']
+        product.price = request.POST['price']
+        product.condition = request.POST['condition']
+        product.is_sold = 'is_sold' in request.POST
+        
+        # 이미지 업로드
+        if 'images' in request.FILES:
+            for img in request.FILES.getlist('images'):
+                ProductImage.objects.create(product=product, image=img)
+
+        product.save()
+
+        return redirect('accounts:profile', id=request.user.id)
+
+    # GET 요청: 기존 정보 채우기
+    context = {
+        'product': product,
+        'product_images': product_images
+    }
+    return render(request, 'products/product_edit.html', context)
+
+
+def product_delete(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    product.delete()
+    return redirect('accounts:profile', id=request.id)
