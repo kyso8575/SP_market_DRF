@@ -6,9 +6,8 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import ValidationError
 
 from rest_framework.response import Response
-from .serializers import UserSerializer, FollowSerializer
+from .serializers import UserSerializer, FollowSerializer, UserProfileSerializer
 from rest_framework.views import APIView
-from products.serializers import UserProfileSerializer
 
 
 User = get_user_model()  # 현재 설정된 사용자 모델
