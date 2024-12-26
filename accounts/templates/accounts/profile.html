@@ -78,11 +78,13 @@
       <div class="item-grid">
         {% for item in product_data %}
         <div class="item-card">
+          <a href="{% url 'products:product_edit' item.product.id %}">
           {% if item.image %}
           <img src="{{ item.image }}" alt="{{ item.product.name }}" />
           {% else %}
           <div class="no-image">No Image</div>
           {% endif %}
+        </a>
           <p>
             {{ item.product.name }}<br /><strong
               >Price: ${{ item.product.price }}</strong
@@ -103,6 +105,7 @@
       <div class="item-grid">
         {% for item in wishlist_data %}
         <div class="item-card">
+          <a href="{% url 'products:product_detail' item.product.id %}">
           {% if item.image %}
           <img src="{{ item.image }}" alt="{{ item.product.name }}" />
           {% else %}
@@ -111,6 +114,7 @@
             alt="No Image Available"
           />
           {% endif %}
+          </a>
           <p>{{ item.product.name }}</p>
           <p>{{ item.product.price }}원</p>
           <p>상태: {{ item.product.get_condition_display }}</p>
